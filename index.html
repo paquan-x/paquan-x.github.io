@@ -1,1 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phu Quan | Cybersecurity & TPM</title>
+    <meta name="description" content="Phu Quan - Technical Product Manager & Cybersecurity Analyst Portfolio">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* -------------------------
+           CORE VARIABLES (DEEP AMBIENT)
+        ------------------------- */
+        :root {
+            /* Default Dark Mode */
+            --bg-body: #030305;
+            
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --text-dim: #6b7280;
+            
+            /* Modern, high-contrast accents */
+            --accent-1: #c084fc; /* Purple */
+            --accent-2: #6366f1; /* Indigo */
+            --accent-3: #2dd4bf; /* Teal */
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --nav-bg: rgba(10, 10, 10, 0.7);
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* Light Mode Overrides */
+        [data-theme="light"] {
+            --bg-body: #f0f2f5; /* Soft, premium light grey/white */
+            
+            --text-main: #111827; /* Dark slate for readability */
+            --text-muted: #4b5563;
+            --text-dim: #6b7280;
+            
+            /* Accents remain vibrant but maybe slightly darker for contrast if needed, 
+               but keeping them same usually works well against light too */
+            
+            /* Glassmorphism for Light Mode (Frosted Glass) */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(0, 0, 0, 0.06);
+            --glass-highlight: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.75);
+        }
+
+        /* -------------------------
+           RESET & BASE
+        ------------------------- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* -------------------------
+           AMBIENT BACKGROUND ANIMATION
+        ------------------------- */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: floatOrb 20s infinite ease-in-out alternate;
+        }
+        
+        .orb-1 {
+            top: -10%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--accent-1), transparent 70%);
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            bottom: -10%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--accent-2), transparent 70%);
+            animation-delay: -5s;
+        }
+        
+        .orb-3 {
+            top: 40%; left: 40%;
+            width: 40vw; height: 40vw;
+            background: radial-gradient(circle, var(--accent-3), transparent 70%);
+            animation-duration: 25s;
+            opacity: 0.2;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 30px) scale(1.1); }
+        }
+
+        /* -------------------------
+           UTILITIES
+        ------------------------- */
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        .mono { font-family: var(--font-code); letter-spacing: -0.5px; }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .glass-card:hover {
+            border-color: var(--glass-highlight);
+            transform: translateY(-5px);
+            background: var(--glass-highlight); /* slight tint on hover */
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+        }
+
+        /* -------------------------
+           NAVIGATION
+        ------------------------- */
+        nav {
+            position: fixed;
+            top: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 1000px;
+            height: 60px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        .nav-container {
+            width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; gap: 24px; }
+        .nav-link { 
+            font-size: 0.85rem; color: var(--text-muted); font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: var(--text-main); text-shadow: 0 0 10px rgba(120, 120, 120, 0.3); }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: transform 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover {
+            background: var(--glass-border);
+            transform: rotate(15deg);
+        }
+
+        /* -------------------------
+           HERO SECTION
+        ------------------------- */
+        .hero {
+            padding: 200px 0 120px;
+            min-height: 100vh;
+            display: flex; align-items: center;
+            position: relative;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.05;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            /* Adjust gradient for light mode via opacity or specific colors if needed, 
+               but using text-main allows CSS var transition */
+            color: var(--text-main); 
+        }
+
+        .highlight-text {
+            /* Compelling gradient text */
+            background: linear-gradient(to right, var(--accent-3), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.2rem; color: var(--text-muted);
+            max-width: 550px; margin-bottom: 2.5rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .hero-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted); /* Brighter than dim for readability */
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px; /* Increased padding for pill shape */
+            border-radius: 100px; /* Pill shape to match other elements */
+            border: 1px solid var(--glass-border);
+            transition: 0.3s ease;
+            cursor: default;
+        }
+
+        .hero-location:hover {
+            border-color: var(--accent-3);
+            background: rgba(45, 212, 191, 0.1);
+            color: var(--text-main);
+        }
+
+        .hero-socials { display: flex; gap: 1.5rem; align-items: center; }
+        
+        .social-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            font-size: 1.4rem;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-4px) scale(1.1);
+            border-color: var(--accent-2);
+            color: var(--accent-2);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Bitmoji Image Styling */
+        .image-container {
+            position: relative;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .hero-bitmoji {
+            width: 100%; max-width: 380px; height: auto;
+            border-radius: 24px;
+            transform: rotate(-2deg);
+            transition: transform 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            position: relative; z-index: 2;
+        }
+        
+        .hero-bitmoji:hover { transform: rotate(0deg) scale(1.02); }
+
+        /* -------------------------
+           SECTIONS GENERAL
+        ------------------------- */
+        section { padding: 120px 0; max-width: 1200px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+        
+        .section-header { margin-bottom: 60px; max-width: 700px; }
+        .section-label { 
+            color: var(--accent-3); font-family: var(--font-code); font-size: 0.85rem; 
+            margin-bottom: 16px; display: inline-block; letter-spacing: 1px; text-transform: uppercase;
+            padding: 4px 12px; background: rgba(45, 212, 191, 0.1); border-radius: 100px;
+        }
+        .section-title { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; color: var(--text-main); }
+        .section-subtitle { font-size: 1.1rem; color: var(--text-dim); font-weight: 300; }
+
+        /* -------------------------
+           EDUCATION GRID
+        ------------------------- */
+        .edu-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+        }
+        
+        .edu-school { font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
+        .edu-degree { 
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: var(--font-ui); font-weight: 600; font-size: 1rem; margin-bottom: 20px; display: block;
+        }
+        
+        .award-list li {
+            position: relative; padding-left: 28px; margin-bottom: 10px;
+            color: var(--text-muted); font-size: 0.95rem;
+        }
+        .award-list li::before {
+            content: '\f091'; font-family: "Font Awesome 6 Free"; font-weight: 900;
+            position: absolute; left: 0; color: var(--accent-3); font-size: 0.9rem; top: 3px;
+        }
+
+        .edu-meta {
+            margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; font-family: var(--font-code); font-size: 0.85rem; color: var(--text-dim);
+        }
+
+        /* -------------------------
+           EXPERIENCE LOG
+        ------------------------- */
+        .log-container { 
+            border-left: 2px solid var(--glass-border); 
+            padding-left: 50px; margin-left: 10px; 
+        }
+        
+        .log-entry { position: relative; padding-bottom: 80px; }
+        .log-entry:last-child { padding-bottom: 0; }
+        
+        /* Gradient Timeline Dot */
+        .log-entry::after {
+            content: ''; position: absolute; left: -59px; top: 8px;
+            width: 16px; height: 16px; background: var(--bg-body);
+            border: 2px solid var(--accent-2); border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .log-entry:hover::after { background: var(--accent-2); transform: scale(1.2); }
+
+        .log-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .log-role { font-size: 1.5rem; font-weight: 700; color: var(--text-main); line-height: 1.2; }
+        .log-company { color: var(--accent-3); font-weight: 600; font-size: 1.1rem; margin-bottom: 5px; }
+        
+        .log-time { 
+            font-family: var(--font-code); font-size: 0.85rem; color: var(--text-main); 
+            background: var(--glass-bg); padding: 6px 14px; border-radius: 100px; 
+            border: 1px solid var(--glass-border); white-space: nowrap;
+        }
+
+        .log-list li {
+            position: relative; padding-left: 24px; margin-bottom: 12px;
+            color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;
+        }
+        .log-list li::before {
+            content: '→'; position: absolute; left: 0; color: var(--accent-2);
+            font-weight: bold; font-size: 1.1rem; top: -1px;
+        }
+
+        /* -------------------------
+           PROJECTS GRID
+        ------------------------- */
+        .project-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            display: flex; flex-direction: column; height: 100%;
+        }
+
+        .project-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+        .project-date { 
+            font-family: var(--font-code); font-size: 0.8rem; color: var(--accent-1); 
+            margin-bottom: 20px; display: inline-block; background: rgba(192, 132, 252, 0.1);
+            padding: 4px 10px; border-radius: 4px;
+        }
+        
+        .project-list li {
+            position: relative; padding-left: 20px; margin-bottom: 10px;
+            color: var(--text-muted); font-size: 1rem; line-height: 1.6;
+        }
+        .project-list li::before {
+            content: '•'; position: absolute; left: 0; color: var(--accent-1); font-size: 1.2rem;
+        }
+
+        /* -------------------------
+           SKILLS & LEADERSHIP
+        ------------------------- */
+        .skills-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+        .skill-group {
+            background: var(--glass-bg);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+        .skill-group:hover { 
+            border-color: var(--accent-3); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(45, 212, 191, 0.05));
+        }
+        
+        .skill-group h4 { color: var(--text-main); margin-bottom: 16px; font-weight: 700; font-size: 1.1rem; letter-spacing: -0.5px; }
+        .skill-group p { font-family: var(--font-ui); font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; }
+
+        .leadership-card {
+            margin-top: 24px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(99, 102, 241, 0.03));
+        }
+
+        /* -------------------------
+           FOOTER
+        ------------------------- */
+        footer {
+            border-top: 1px solid var(--glass-border); padding: 80px 0; margin-top: 100px;
+            text-align: center; color: var(--text-dim); font-size: 0.9rem;
+            background: rgba(0,0,0,0.3);
+        }
+        .socials { display: flex; justify-content: center; gap: 32px; margin-top: 24px; }
+        .socials a { font-weight: 500; transition: color 0.2s; font-size: 1rem; }
+        .socials a:hover { color: white; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        /* -------------------------
+           RESPONSIVE
+        ------------------------- */
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+            .hero-btns { justify-content: center; }
+            .image-container { order: -1; }
+            .nav-links { display: none; }
+            .edu-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                PHU QUAN
+            </a>
+            <div class="nav-links">
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#skills" class="nav-link">Skills</a>
+            </div>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1>
+                    Designing Technology for <span class="highlight-text">People & Society</span>.
+                </h1>
+                <p class="hero-desc">
+                    Informatics specialist and Cybersecurity Analyst. I focus on the study, design, and development of secure information technology, transforming complex data into resilient, user-centered solutions.
+                </p>
+                
+                <div class="hero-location">
+                    <i class="fas fa-map-marker-alt"></i> Seattle, WA
+                </div>
+
+                <div class="hero-socials">
+                    <a href="https://www.linkedin.com/in/phu-quan/" target="_blank" class="social-btn" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="mailto:phu.a.qu4n@gmail.com" class="social-btn" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://github.com/paquan-x" target="_blank" class="social-btn" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="image-container">
+                <img src="/bitmoji.png" alt="Phu Quan" class="hero-bitmoji">
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="section-header">
+            <span class="section-label">01. Academic Background</span>
+            <h2 class="section-title">Education</h2>
+            <p class="section-subtitle">Foundational knowledge in security, policy, and information systems.</p>
+        </div>
+        <div class="edu-grid">
+            <div class="glass-card">
+                <div class="edu-school">University of Washington</div>
+                <span class="edu-degree">B.S. Informatics (Information Assurance & Cybersecurity)</span>
+                <ul class="award-list">
+                    <li>Awards: Dean’s List (2022-2025)</li>
+                    <li>UW EPO Scholarship</li>
+                    <li>2x Capstone Awards (Equity and Visionary)</li>
+                </ul>
+                <div class="edu-meta">
+                    <span>Seattle, WA</span>
+                    <span>March 2026 | GPA: 3.5/4.0</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="edu-school">Carnegie Mellon University</div>
+                <span class="edu-degree">Fellowship in Info Systems, Cybersecurity & Public Policy</span>
+                <ul class="award-list">
+                    <li>Awards: 1st Place Research Fellow</li>
+                    <li>NIST 800-53 Firewall Efficacy Study</li>
+                </ul>
+                <div class="edu-meta">
+                    <span>Heinz College</span>
+                    <span>Aug 2025 | GPA: 4.0/4.0</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="section-header">
+            <span class="section-label">02. Professional History</span>
+            <h2 class="section-title">Experience</h2>
+            <p class="section-subtitle">Track record of delivering technical solutions and security improvements.</p>
+        </div>
+        
+        <div class="log-container">
+            <div class="log-entry">
+                <div class="log-header">
+                    <div>
+                        <div class="log-role">Security Analyst Intern</div>
+                        <div class="log-company">Oregon State University</div>
+                    </div>
+                    <div class="log-time">May 2025 - August 2025</div>
+                </div>
+                <div class="mono" style="color:var(--text-dim); margin-bottom:15px;">Remote</div>
+                <ul class="log-list">
+                    <li>Engineered KQL queries to centralize logs, reducing alert investigation time by 25% for the SOC.</li>
+                    <li>Mitigated 20+ phishing events and automated threat intel, cutting manual analysis time by 7%.</li>
+                </ul>
+            </div>
+            <div class="log-entry">
+                <div class="log-header">
+                    <div>
+                        <div class="log-role">Technical Marketing Engineer Intern</div>
+                        <div class="log-company">Infoblox</div>
+                    </div>
+                    <div class="log-time">June 2025 - August 2025</div>
+                </div>
+                <div class="mono" style="color:var(--text-dim); margin-bottom:15px;">Tacoma, WA</div>
+                <ul class="log-list">
+                    <li>Analyzed 25M+ DNS events vs AWS rules, finding a 3-month lead driving a +$2M product expansion.</li>
+                    <li>Developed an AI-driven technical video workflow, cutting production time 66% and doubling weekly team output.</li>
+                    <li>Resolved 15+ API/AWS incidents and authored guides that eliminated recurring support tickets.</li>
+                </ul>
+            </div>
+
+             <div class="log-entry">
+                <div class="log-header">
+                    <div>
+                        <div class="log-role">Lead Student IT Consultant</div>
+                        <div class="log-company">Infoblox / University of Washington</div>
+                    </div>
+                    <div class="log-time">January 2025 - Present</div>
+                </div>
+                <div class="mono" style="color:var(--text-dim); margin-bottom:15px;">Seattle, WA</div>
+                <ul class="log-list">
+                    <li>Managed Tier 1/2 support for 5,000+ users and 14 staff, resolving 55+ daily tickets (99% uptime).</li>
+                    <li>Led 12+ Jira sprints, delivering 3 infrastructure projects with 95% stakeholder satisfaction.</li>
+                    <li>Automated provisioning for 100+ loaner Macs via Jamf, saving on average of 18 mins/device per loan cycle.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-header">
+            <span class="section-label">03. Portfolio</span>
+            <h2 class="section-title">Projects</h2>
+        </div>
+        <div class="project-grid">
+            <div class="glass-card project-card">
+                <h3 class="project-title">Stock Sentiment Analysis Engine</h3>
+                <div><span class="project-date">Sep 2025 - Dec 2025</span></div>
+                <ul class="project-list">
+                    <li>Built a real-time news engine quantifying market sentiment from live financial feeds.</li>
+                    <li>Fused BM25 relevance and VADER logic to index content by topic priority and emotional tone.</li>
+                    <li>Engineered a scraping pipeline to retrieve recent sources, capturing dynamic market trends.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card project-card">
+                <h3 class="project-title">PKI & Network Traffic Encryption</h3>
+                <div><span class="project-date">March 2024 - June 2024</span></div>
+                <ul class="project-list">
+                    <li>Architected PKI via OpenSSL and Docker to manage TLS 1.3 certs in a secure simulated lab.</li>
+                    <li>Scripted Python recon tools to map endpoints, detect exposed ports, and patch OWASP flaws.</li>
+                    <li>Conducted penetration testing and authored PoC exploits to validate critical web patches.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="section-header">
+            <span class="section-label">04. Technical Capabilities</span>
+            <h2 class="section-title">Skills</h2>
+        </div>
+        <div class="skills-container">
+            <div class="skill-group">
+                <h4>Programming Languages</h4>
+                <p>Python, Java, C, JavaScript, SQL, R, HTML/CSS</p>
+            </div>
+            <div class="skill-group">
+                <h4>Networks & Security</h4>
+                <p>TCP/IP, DNS, HTTP/S, Firewall, Microsoft Defender</p>
+            </div>
+            <div class="skill-group">
+                <h4>Web Development</h4>
+                <p>React, Next.js, Flask, REST APIs</p>
+            </div>
+            <div class="skill-group">
+                <h4>Tools & Technologies</h4>
+                <p>Git, Docker, AWS, Azure, GCP, Linux</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="leadership">
+        <div class="section-header">
+            <span class="section-label">05. Community</span>
+            <h2 class="section-title">Leadership & Involvement</h2>
+        </div>
+        <div class="glass-card leadership-card">
+            <h3 class="project-title">Hack for Social Good - Hackathon Mentor</h3>
+            <span class="project-date">August 2023 - Present | Seattle, WA</span>
+            <ul class="project-list">
+                <li>Mentor high student teams through the design lifecycle to prototype social impact solutions.</li>
+                <li>Guide students in applying Informatics concepts to solve real-world societal problems.</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div>© 2025 Phu Quan. All rights reserved.</div>
+        <div class="socials">
+            <a href="mailto:phu.a.qu4n@gmail.com">Email</a>
+            <a href="https://linkedin.com/in/phu-quan" target="_blank">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const icon = toggleBtn.querySelector('i');
+        const body = document.body;
+
+        toggleBtn.addEventListener('click', () => {
+            if (body.hasAttribute('data-theme')) {
+                body.removeAttribute('data-theme');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+    </script>
+</body>
+</html>
